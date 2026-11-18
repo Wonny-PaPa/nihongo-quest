@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#131130">
+    <title>Nihongo Quest - JLPT 상황형 일본어 회화 학습</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans JP & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'Inter', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                    colors: {
+                        indigoJp: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#4f46e5',
+                            600: '#3730a3',
+                            800: '#1e1b4b',
+                            900: '#131130',
+                        },
+                        sakura: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                        },
+                        goldCoin: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    animation: {
+                        'pulse-ring': 'pulseRing 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite',
+                        'pop-in': 'popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'sheet-up': 'sheetUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'wave-bar': 'waveBar 0.8s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        pulseRing: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0.85' },
+                            '70%': { transform: 'scale(1.38)', opacity: '0' },
+                            '100%': { transform: 'scale(0.95)', opacity: '0' },
+                        },
+                        popIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        sheetUp: {
+                            '0%': { transform: 'translateY(100%)' },
+                            '100%': { transform: 'translateY(0)' },
+                        },
+                        waveBar: {
+                            '0%': { height: '6px' },
+                            '100%': { height: '22px' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 모바일 네이티브 앱과 동일한 터치 및 뷰포트 제어 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overscroll-behavior-y: none; /* 당겨서 새로고침(Pull-to-refresh) 바운스 방지 */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        input, textarea {
+            user-select: text;
+            font-size: 16px !important; /* iOS Safari 포커스 시 강제 화면 확대 방지 */
+        }
+        .safe-pt {
+            padding-top: max(12px, env(safe-area-inset-top));
+        }
+        .safe-pb {
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        ruby rt {
+            font-size: 0.65em;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .touch-btn {
+            transition: transform 0.1s ease, background-color 0.15s ease;
+        }
+        .touch-btn:active {
+            transform: scale(0.95);
+        }
+        .game-btn {
+            transition: all 0.12s ease;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+        }
+        .game-btn:active {
+            transform: translateY(3px) scale(0.97);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-[100dvh] bg-slate-950">
+
+    <!-- 스마트폰 풀스크린(100dvh) / 데스크톱 중앙 모바일 프레임 -->
+    <div id="app-container" class="relative w-full sm:max-w-[440px] h-[100dvh] sm:h-[860px] sm:rounded-[38px] sm:border-[8px] sm:border-slate-800 bg-slate-50 flex flex-col overflow-hidden shadow-2xl">
+
+        <!-- 상단 상태바 (iOS/Android 노치 Safe Area 적용) -->
+        <header class="bg-indigoJp-900 text-white px-4 pb-3 safe-pt flex items-center justify-between shrink-0 z-20 shadow-md">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-sakura-400 to-sakura-500 flex items-center justify-center font-black text-base text-white shadow">
+                    日
+                </div>
+                <div>
+                    <h1 class="text-sm font-extrabold tracking-tight leading-none">Nihongo Quest</h1>
+                    <button onclick="switchTab('settings')" class="flex items-center gap-1.5 mt-1 text-[11px] font-medium text-indigo-200 active:text-white">
+                        <span id="vv-status-dot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+                        <span id="vv-status-label" class="truncate max-w-[145px]">음성 확인 중...</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 재화 표시 (별 & 엔화 코인) -->
+            <div class="flex items-center gap-1.5">
+                <div class="bg-indigoJp-800/95 border border-indigo-700/70 px-2.5 py-1.5 rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    <span id="total-stars" class="text-xs font-extrabold text-amber-300">0</span>
+                </div>
+                <div class="bg-indigoJp-800/95 border border-indigo-700/70 px-2.5 py-1.5 rounded-full flex items-center gap-1">
+                    <span class="w-4 h-4 rounded-full bg-goldCoin-500 text-indigoJp-900 font-black text-[10px] flex items-center justify-center">¥</span>
+                    <span id="total-coins" class="text-xs font-extrabold text-goldCoin-400">250</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 토스트 알림 메시지 (모바일 상단 플로팅 배너) -->
+        <div id="toast-box" class="pointer-events-none fixed top-16 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[400px] flex flex-col items-center gap-2"></div>
+
+        <!-- ================= 1. 미션 퀘스트 탭 (메인) ================= -->
+        <main id="view-missions" class="flex-1 flex flex-col overflow-hidden">
+            <!-- JLPT 5단계 가로 터치 스크롤 알약(Pill) 선택 바 -->
+            <div class="bg-white border-b border-slate-200 px-3 py-2.5 shrink-0 shadow-sm z-10">
+                <div class="flex items-center justify-between mb-2 px-1">
+                    <span class="text-[11px] font-extrabold text-slate-600">JLPT 급수 선택</span>
+                    <span id="level-badge-desc" class="text-[10px] font-bold text-indigoJp-600 bg-indigoJp-50 px-2.5 py-0.5 rounded-full">입문 · 후리가나 100%</span>
+                </div>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-0.5" id="jlpt-selector">
+                    <!-- JS로 N5~N1 터치 알약 버튼 렌더링 -->
+                </div>
+            </div>
+
+            <!-- 활성 AI 튜터 배너 -->
+            <div class="px-4 pt-3 pb-1 shrink-0">
+                <div class="bg-gradient-to-r from-indigoJp-600 to-indigo-500 rounded-2xl p-3 text-white flex items-center justify-between shadow-md">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div id="active-tutor-avatar" class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl shrink-0 border border-white/30">
+                            🫛
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-bold bg-black/25 px-2 py-0.5 rounded-full shrink-0">회화 파트너</span>
+                                <span id="active-tutor-vv-id" class="text-[10px] text-indigo-100 truncate">VOICEVOX #3</span>
+                            </div>
+                            <h2 id="active-tutor-name" class="font-extrabold text-sm mt-0.5 truncate">즌다몬 (ずんだもん)</h2>
+                            <p id="active-tutor-desc" class="text-[11px] text-indigo-100 truncate">활기차고 다정한 초급 맞춤 튜터</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('shop')" class="ml-2 shrink-0 bg-white/20 active:bg-white/30 text-white text-xs font-bold px-3 py-2.5 rounded-xl touch-btn">
+                        변경 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 미션 스테이지 리스트 -->
+            <div id="mission-list-container" class="flex-1 overflow-y-auto px-4 py-3 space-y-3 no-scrollbar pb-6">
+                <!-- JS로 선택된 JLPT 단계의 미션 카드 렌더링 -->
+            </div>
+        </main>
+
+        <!-- ================= 2. AI 회화실 탭 (자유 프리토킹 / 즉석 발음 연습) ================= -->
+        <main id="view-freeroom" class="hidden flex-1 flex flex-col overflow-hidden">
+            <div class="bg-white border-b border-slate-200 px-4 py-3 shrink-0 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-black text-slate-800">상황형 일본어 회화실</h2>
+                    <p class="text-[11px] text-slate-500">입력 내용에 반응하는 오프라인 상황형 회화 연습 · 실시간 생성형 AI 아님</p>
+                </div>
+                <span id="freeroom-level-pill" class="px-2.5 py-1 rounded-full bg-indigoJp-100 text-indigoJp-700 text-xs font-black">N5</span>
+            </div>
+
+            <!-- 스마트폰 내장 LLM: WebLLM은 서버/API 키 없이 사용자의 GPU에서 실행 -->
+            <div class="bg-white border-b border-indigo-100 px-4 py-3 shrink-0 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                    <label for="local-ai-model" class="text-xs font-extrabold text-indigoJp-900">무료 스마트폰 AI 회화</label>
+                    <span id="local-ai-status" aria-live="polite" class="text-[10px] text-amber-700 font-bold">아직 시작하지 않음</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <select id="local-ai-model" aria-label="다운로드할 AI 모델" class="flex-1 min-w-0 h-10 text-xs border border-slate-200 rounded-xl bg-slate-50 px-2">
+                        <option value="small">경량형 · Qwen2.5 0.5B (권장)</option>
+                        <option value="quality">고급형 · Qwen2.5 1.5B (고사양)</option>
+                    </select>
+                    <button id="local-ai-start" onclick="startLocalAI()" class="h-10 px-3 rounded-xl bg-indigoJp-600 text-white text-xs font-bold">AI 시작</button>
+                </div>
+                <div id="local-ai-progress-wrap" class="hidden rounded-full bg-indigo-100 h-1.5 overflow-hidden"><div id="local-ai-progress" class="h-full bg-indigoJp-600 transition-all" style="width:0%"></div></div>
+                <p id="local-ai-notice" class="text-[10px] text-slate-500 leading-snug">지원 기기에서는 자유 생성형 AI 대화가 됩니다. 시작 전에는 기본 상황형 회화이며, AI 사용 여부를 구분해 표시합니다.</p>
+                <button onclick="resetLocalAIChat()" class="text-[11px] font-semibold text-slate-500 underline">AI 대화 초기화</button>
+            </div>
+            <div id="freeroom-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 no-scrollbar">
+                <!-- 자유 회화 말풍선 -->
+            </div>
+
+            <!-- 하단 엄지손가락 최적화 마이크 컨트롤 -->
+            <div class="bg-white border-t border-slate-200 px-4 py-3 shrink-0">
+                <div class="flex gap-1.5 overflow-x-auto no-scrollbar mb-2.5" id="freeroom-topics">
+                    <!-- 주제 추천 칩 -->
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <input id="freeroom-input" type="text" placeholder="일본어로 인사해보세요..." 
+                           onkeydown="if(event.key==='Enter') handleFreeRoomSubmit()"
+                           class="flex-1 h-12 px-4 rounded-2xl bg-slate-100 border border-slate-200 font-jp focus:outline-none focus:border-indigoJp-500 focus:bg-white">
+                    <button onclick="handleFreeRoomSubmit()" class="w-12 h-12 rounded-2xl bg-indigoJp-600 text-white flex items-center justify-center shrink-0 touch-btn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                    <button onclick="toggleSpeechRecognition('freeroom')" id="btn-mic-freeroom" class="relative w-14 h-12 rounded-2xl bg-gradient-to-br from-sakura-400 to-sakura-500 text-white flex items-center justify-center shadow-lg shrink-0 game-btn">
+                        <span id="mic-pulse-freeroom" class="hidden absolute inset-0 rounded-2xl bg-sakura-400 animate-pulse-ring"></span>
+                        <i id="mic-icon-freeroom" class="fa-solid fa-microphone text-lg relative z-10"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================= 3. 베네핏 상점 탭 ================= -->
+        <main id="view-shop" class="hidden flex-1 flex flex-col overflow-hidden">
+            <div class="bg-white border-b border-slate-200 px-4 py-3 shrink-0">
+                <h2 class="text-base font-black text-slate-800">베네핏 상점 & 도감</h2>
+                <p class="text-xs text-slate-500 mt-0.5">모은 엔화(¥)로 VOICEVOX 성우와 일본 스탬프를 해금하세요!</p>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-4 py-3 space-y-5 no-scrollbar pb-6">
+                <!-- 섹션 1: VOICEVOX AI 튜터 캐릭터 -->
+                <section>
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-extrabold text-indigoJp-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-microphone-lines text-sakura-500"></i> VOICEVOX AI 성우 캐릭터
+                        </h3>
+                        <span class="text-[10px] text-slate-400">터치하여 미리듣기</span>
+                    </div>
+                    <div id="shop-tutors-grid" class="grid grid-cols-1 gap-2.5">
+                        <!-- JS 렌더링 -->
+                    </div>
+                </section>
+
+                <!-- 섹션 2: 일본 가상 여행 스탬프 -->
+                <section>
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-extrabold text-indigoJp-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-torii-gate text-sakura-500"></i> 일본 전국 여행 스탬프 컬렉션
+                        </h3>
+                        <span id="stamp-progress-text" class="text-[10px] font-bold text-indigoJp-600">0 / 5 수집</span>
+                    </div>
+                    <div id="shop-stamps-grid" class="grid grid-cols-2 gap-2.5">
+                        <!-- JS 렌더링 -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- ================= 4. 음성/앱 설정 & 통계 탭 ================= -->
+        <main id="view-settings" class="hidden flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 no-scrollbar pb-6">
+                <!-- 학습 요약 카드 -->
+                <div class="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigoJp-600 to-sakura-500 text-white flex items-center justify-center text-xl font-black shadow">
+                            学習
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-black text-slate-800">일본어 퀘스트 도전자</h2>
+                            <p id="profile-rank-title" class="text-xs font-bold text-indigoJp-600 mt-0.5">Lv.1 히라가나 여행자</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-100 text-center">
+                        <div>
+                            <div id="stat-cleared" class="text-base font-black text-slate-800">0</div>
+                            <div class="text-[10px] text-slate-400 font-medium">완료 미션</div>
+                        </div>
+                        <div>
+                            <div id="stat-stars" class="text-base font-black text-amber-500">0</div>
+                            <div class="text-[10px] text-slate-400 font-medium">획득 별(★)</div>
+                        </div>
+                        <div>
+                            <div id="stat-stamps" class="text-base font-black text-sakura-500">0</div>
+                            <div class="text-[10px] text-slate-400 font-medium">여행 스탬프</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 스마트폰 ↔ PC VOICEVOX Wi-Fi 연동 설정 -->
+                <div class="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-extrabold text-indigoJp-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-wave-square text-indigoJp-600"></i> VOICEVOX 서버 URL 설정
+                        </h3>
+                        <span id="settings-vv-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">확인 중</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        스마트폰과 같은 Wi-Fi에 연결된 PC에서 VOICEVOX를 실행 중이라면, PC의 내부 IP 주소(예: <code class="bg-slate-100 px-1 rounded text-slate-700">http://192.168.0.10:50021</code>)를 입력해 모바일에서도 AI 성우 음성을 쓸 수 있습니다.
+                    </p>
+                    <input id="vv-url-input" type="url" placeholder="http://localhost:50021" 
+                           class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 font-mono text-slate-800 focus:outline-none focus:border-indigoJp-500">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="saveVoicevoxSettings()" class="h-11 rounded-xl bg-indigoJp-600 text-white font-extrabold text-xs touch-btn">
+                            저장 및 연결 확인
+                        </button>
+                        <button onclick="testCurrentVoice()" class="h-11 rounded-xl bg-sakura-500 text-white font-extrabold text-xs touch-btn flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-volume-high"></i> 음성 테스트
+                        </button>
+                    </div>
+                </div>
+
+                <!-- JLPT 단계별 진척도 -->
+                <div class="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm">
+                    <h3 class="text-xs font-extrabold text-slate-700 mb-3">JLPT 급수별 클리어 현황</h3>
+                    <div id="jlpt-progress-bars" class="space-y-2.5"></div>
+                </div>
+
+                <!-- 학습 데이터 백업(JSON) 및 초기화 -->
+                <div class="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm space-y-2.5">
+                    <h3 class="text-xs font-extrabold text-slate-700">학습 데이터 관리</h3>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="exportProgressData()" class="h-10 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs touch-btn">
+                            <i class="fa-solid fa-download mr-1"></i>백업 복사
+                        </button>
+                        <button onclick="importProgressData()" class="h-10 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs touch-btn">
+                            <i class="fa-solid fa-upload mr-1"></i>복원하기
+                        </button>
+                        <button onclick="resetProgressData()" class="h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 font-bold text-xs touch-btn">
+                            초기화
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================= 하단 고정 엄지손가락 탭 바 (Safe Area 적용) ================= -->
+        <nav id="bottom-nav" class="bg-white border-t border-slate-200 px-2 pt-2 safe-pb grid grid-cols-4 shrink-0 z-20">
+            <button onclick="switchTab('missions')" id="nav-missions" class="flex flex-col items-center justify-center py-1 text-indigoJp-600 font-extrabold touch-btn">
+                <i class="fa-solid fa-map-location-dot text-lg"></i>
+                <span class="text-[10px] mt-1">미션 퀘스트</span>
+            </button>
+            <button onclick="switchTab('freeroom')" id="nav-freeroom" class="flex flex-col items-center justify-center py-1 text-slate-400 font-semibold touch-btn">
+                <i class="fa-solid fa-comments text-lg"></i>
+                <span class="text-[10px] mt-1">AI 회화실</span>
+            </button>
+            <button onclick="switchTab('shop')" id="nav-shop" class="flex flex-col items-center justify-center py-1 text-slate-400 font-semibold touch-btn">
+                <i class="fa-solid fa-store text-lg"></i>
+                <span class="text-[10px] mt-1">베네핏 상점</span>
+            </button>
+            <button onclick="switchTab('settings')" id="nav-settings" class="flex flex-col items-center justify-center py-1 text-slate-400 font-semibold touch-btn">
+                <i class="fa-solid fa-sliders text-lg"></i>
+                <span class="text-[10px] mt-1">음성/앱 설정</span>
+            </button>
+        </nav>
+
+        <!-- ================= 5. 실시간 AI 회화 미션 화면 (풀스크린 오버레이) ================= -->
+        <div id="conversation-screen" class="hidden absolute inset-0 bg-slate-50 z-30 flex flex-col">
+            <!-- 회화 상단 헤더 (Safe Area Top 적용) -->
+            <div class="bg-white border-b border-slate-200 px-3 pb-2.5 safe-pt flex items-center justify-between shrink-0 shadow-sm">
+                <button onclick="closeConversation()" class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center touch-btn">
+                    <i class="fa-solid fa-arrow-left text-base"></i>
+                </button>
+                <div class="text-center flex-1 px-2 min-w-0">
+                    <div class="flex items-center justify-center gap-1.5">
+                        <span id="chat-level-tag" class="text-[10px] font-black bg-indigoJp-600 text-white px-2 py-0.5 rounded-md shrink-0">N5</span>
+                        <h3 id="chat-mission-title" class="text-xs font-extrabold text-slate-800 truncate">편의점에서 도시락 계산하기</h3>
+                    </div>
+                    <div class="w-full max-w-[170px] mx-auto bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                        <div id="chat-progress-bar" class="bg-gradient-to-r from-sakura-400 to-indigoJp-500 h-full transition-all duration-300" style="width: 20%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2.5 py-2 rounded-xl shrink-0">
+                    <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    <span id="chat-potential-stars" class="text-xs font-black text-amber-600">3</span>
+                </div>
+            </div>
+
+            <!-- 미션 목표 배너 -->
+            <div class="bg-indigoJp-50 border-b border-indigoJp-100 px-3.5 py-2 flex items-center justify-between text-[11px] shrink-0">
+                <div class="flex items-center gap-1.5 text-indigoJp-900 font-semibold truncate">
+                    <i class="fa-solid fa-bullseye text-sakura-500 shrink-0"></i>
+                    <span id="chat-mission-goal" class="truncate">목표: 점원의 질문에 답하고 계산 완료하기</span>
+                </div>
+                <span id="chat-turn-counter" class="text-[10px] font-extrabold text-indigoJp-600 shrink-0 ml-2 bg-white px-2 py-0.5 rounded-full">1 / 3 턴</span>
+            </div>
+
+            <!-- 대화 말풍선 영역 -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 no-scrollbar">
+                <!-- AI 및 사용자 말풍선 동적 생성 -->
+            </div>
+
+            <!-- 실시간 음성 인식 파형/중간 자막 바 -->
+            <div id="stt-live-banner" class="hidden bg-sakura-500 text-white px-4 py-2.5 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="flex items-end gap-0.5 h-5 shrink-0">
+                        <span class="w-1 bg-white rounded-full animate-wave-bar" style="animation-delay: 0s"></span>
+                        <span class="w-1 bg-white rounded-full animate-wave-bar" style="animation-delay: 0.2s"></span>
+                        <span class="w-1 bg-white rounded-full animate-wave-bar" style="animation-delay: 0.4s"></span>
+                    </div>
+                    <span id="stt-interim-text" class="text-xs font-jp font-bold truncate">일본어로 말씀해 주세요...</span>
+                </div>
+                <button onclick="toggleSpeechRecognition('mission')" class="text-[11px] font-extrabold bg-black/20 px-2.5 py-1 rounded-lg shrink-0">중지</button>
+            </div>
+
+            <!-- 하단 엄지손가락 최적화 컨트롤 영역 (Safe Area Bottom 적용) -->
+            <div class="bg-white border-t border-slate-200 px-3 pt-2.5 safe-pb shrink-0 space-y-2.5 shadow-[0_-4px_15px_rgba(0,0,0,0.04)]">
+                <!-- 접이식 텍스트/빠른 선택지 서랍 (지하철/버스 등 조용한 환경용) -->
+                <div id="quiet-input-drawer" class="space-y-2">
+                    <div id="quick-replies" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                        <!-- JS로 선택지 칩 렌더링 -->
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input id="chat-text-input" type="text" placeholder="직접 일본어 입력 (조용한 곳에서 사용)" 
+                               onkeydown="if(event.key==='Enter') handleUserTextSubmit()"
+                               class="flex-1 h-11 px-3.5 rounded-2xl bg-slate-100 border border-slate-200 font-jp focus:outline-none focus:border-indigoJp-500 focus:bg-white">
+                        <button onclick="handleUserTextSubmit()" class="w-11 h-11 rounded-2xl bg-indigoJp-600 text-white flex items-center justify-center shrink-0 touch-btn">
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 엄지손가락 메인 액션 바: [힌트 시트] + [대형 말하기 마이크] + [입력창 토글] -->
+                <div class="flex items-center gap-2.5">
+                    <button onclick="openHintSheet()" class="h-14 px-3.5 rounded-2xl bg-amber-100 text-amber-800 font-extrabold text-xs flex flex-col items-center justify-center shrink-0 touch-btn border border-amber-200">
+                        <i class="fa-solid fa-lightbulb text-base text-amber-500"></i>
+                        <span class="text-[10px] mt-0.5">모범답안</span>
+                    </button>
+
+                    <!-- 대형 터치 마이크 버튼 -->
+                    <button onclick="toggleSpeechRecognition('mission')" id="btn-mic" class="relative flex-1 h-14 rounded-2xl bg-gradient-to-r from-sakura-500 to-rose-500 text-white font-black text-sm flex items-center justify-center gap-2.5 shadow-lg game-btn">
+                        <span id="mic-pulse" class="hidden absolute inset-0 rounded-2xl bg-sakura-400 animate-pulse-ring"></span>
+                        <i id="mic-icon" class="fa-solid fa-microphone text-xl relative z-10"></i>
+                        <span id="mic-btn-label" class="relative z-10">터치해서 일본어로 말하기</span>
+                    </button>
+
+                    <button onclick="toggleQuietDrawer()" id="btn-drawer-toggle" class="h-14 px-3.5 rounded-2xl bg-slate-100 text-slate-700 font-extrabold text-xs flex flex-col items-center justify-center shrink-0 touch-btn border border-slate-200">
+                        <i class="fa-solid fa-keyboard text-base"></i>
+                        <span class="text-[10px] mt-0.5">키보드</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 6. 모바일 슬라이드 업 바텀 시트: 힌트 & 모범 답안 ================= -->
+        <div id="hint-bottom-sheet" class="hidden absolute inset-0 bg-slate-900/60 backdrop-blur-[2px] z-40 flex flex-col justify-end" onclick="if(event.target===this) closeHintSheet()">
+            <div class="bg-white rounded-t-[32px] p-5 safe-pb shadow-2xl animate-sheet-up">
+                <div class="w-10 h-1.5 bg-slate-200 rounded-full mx-auto mb-4"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+                        <i class="fa-solid fa-lightbulb mr-1"></i>AI 추천 모범 답안
+                    </span>
+                    <span class="text-[11px] font-bold text-slate-400">힌트 사용 시 최대 ★2개</span>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 my-3">
+                    <p id="hint-jp-text" class="font-jp text-base font-extrabold text-slate-800 leading-relaxed"></p>
+                    <p id="hint-ko-text" class="text-xs text-slate-500 mt-1.5"></p>
+                    <button onclick="listenHintVoice()" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-indigoJp-600 bg-indigoJp-50 px-3 py-1.5 rounded-xl touch-btn">
+                        <i class="fa-solid fa-volume-high"></i> 원어민 발음 먼저 들어보기
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5 mt-4">
+                    <button onclick="closeHintSheet()" class="h-12 rounded-2xl bg-slate-100 text-slate-700 font-extrabold text-xs touch-btn">
+                        직접 말해볼게요
+                    </button>
+                    <button onclick="useHintSample()" class="h-12 rounded-2xl bg-amber-500 text-white font-extrabold text-xs shadow-md touch-btn">
+                        이 문장으로 답변하기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 7. 모바일 슬라이드 업 바텀 시트: 미션 클리어 축하 ================= -->
+        <div id="clear-modal" class="hidden absolute inset-0 bg-slate-900/75 backdrop-blur-sm z-40 flex flex-col justify-end">
+            <div class="bg-white rounded-t-[36px] p-6 safe-pb text-center shadow-2xl animate-sheet-up">
+                <div class="w-10 h-1.5 bg-slate-200 rounded-full mx-auto mb-4"></div>
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center text-3xl shadow-inner">
+                    🏆
+                </div>
+                <h2 class="text-xl font-black text-slate-800 mt-3">미션 클리어!</h2>
+                <p id="clear-subtitle" class="text-xs text-slate-500 mt-1">완벽한 일본어 회화였어요!</p>
+
+                <!-- 획득 별 표시 -->
+                <div id="clear-stars-display" class="flex justify-center gap-3 my-4 text-3xl"></div>
+
+                <!-- 획득 코인 베네핏 -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-5 flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-amber-900">획득 베네핏 보상</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-6 h-6 rounded-full bg-goldCoin-500 text-white font-black text-xs flex items-center justify-center">¥</span>
+                        <span id="clear-reward-coins" class="text-xl font-black text-amber-600">+150</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button onclick="closeClearModal(true)" class="h-13 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-extrabold text-xs touch-btn">
+                        베네핏 상점 가기
+                    </button>
+                    <button onclick="closeClearModal(false)" class="h-13 py-3.5 rounded-2xl bg-indigoJp-600 text-white font-extrabold text-xs shadow-lg game-btn">
+                        다음 미션 계속
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* =========================================================================
+           1. 데이터 모델: JLPT 5단계, 시나리오 미션, VOICEVOX 캐릭터, 여행 스탬프
+           ========================================================================= */
+        const JLPT_LEVELS = {
+            N5: { code: 'N5', name: '입문', desc: '입문 · 후리가나 100% · 느린 속도', rate: 0.85, furigana: 'full', color: 'bg-emerald-500' },
+            N4: { code: 'N4', name: '초급', desc: '초급 · 후리가나 100% · 기본 속도', rate: 0.92, furigana: 'full', color: 'bg-teal-500' },
+            N3: { code: 'N3', name: '중급', desc: '중급 · 주요 한자만 후리가나', rate: 1.0, furigana: 'partial', color: 'bg-indigoJp-500' },
+            N2: { code: 'N2', name: '중상급', desc: '중상급 · 후리가나 없음 · 비즈니스', rate: 1.06, furigana: 'none', color: 'bg-purple-600' },
+            N1: { code: 'N1', name: '고급', desc: '고급 · 원어민 속도 · 심화 토론', rate: 1.12, furigana: 'none', color: 'bg-rose-600' }
+        };
+
+        const AI_TUTORS = [
+            {
+                id: 'zundamon',
+                name: '즌다몬 (ずんだもん)',
+                speakerId: 3,
+                avatar: '🫛',
+                price: 0,
+                pitch: 1.25,
+                desc: '밝고 에너지 넘치는 기본 파트너! 초급자도 긴장하지 않게 응원해줘요.',
+                sampleJp: 'こんにちは！今日も一緒に日本語の会話を頑張るのだ！'
+            },
+            {
+                id: 'metan',
+                name: '시코쿠 메탄 (四国めたん)',
+                speakerId: 2,
+                avatar: '🎀',
+                price: 300,
+                pitch: 1.1,
+                desc: '차분하고 또렷한 표준어 발음! 듣기 연습과 정중한 회화에 최적입니다.',
+                sampleJp: 'はじめまして。正しい発音で丁寧に教えますわね。'
+            },
+            {
+                id: 'tsumugi',
+                name: '카스카베 츠무기 (春日部つむぎ)',
+                speakerId: 8,
+                avatar: '🍯',
+                price: 500,
+                pitch: 1.18,
+                desc: '친근한 일본 여대생 스타일! 실제 친구와 수다 떠는 듯한 자연스러운 톤.',
+                sampleJp: 'やっほー！カフェでおしゃべりするみたいに楽しく話そうよ！'
+            },
+            {
+                id: 'kurono',
+                name: '쿠로노 타케히로 (玄野武宏)',
+                speakerId: 11,
+                avatar: '🧥',
+                price: 800,
+                pitch: 0.85,
+                desc: '듬직한 남성 성우 보이스! 비즈니스 회화(N2~N1) 및 면접 연습에 추천.',
+                sampleJp: 'お疲れ様です。ビジネスシーンでも通用する日本語を身につけましょう。'
+            }
+        ];
+
+        const TRAVEL_STAMPS = [
+            { id: 'tokyo', name: '도쿄 타워', region: '간토 · 도쿄', icon: '🗼', price: 250, desc: '일본 여행의 시작! 도쿄의 야경 스탬프' },
+            { id: 'osaka', name: '오사카성', region: '간사이 · 오사카', icon: '🏯', price: 400, desc: '먹거리와 활기의 도시 오사카 기념 스탬프' },
+            { id: 'fuji', name: '후지산 일출', region: '시즈오카 · 야마나시', icon: '🗻', price: 600, desc: '일본 최고봉 후지산 등정 기념 스탬프' },
+            { id: 'kyoto', name: '교토 금각사', region: '간사이 · 교토', icon: '⛩️', price: 900, desc: '천년 고도 교토의 황금빛 사찰 스탬프' },
+            { id: 'sapporo', name: '삿포로 눈축제', region: '홋카이도 · 삿포로', icon: '⛄', price: 1200, desc: '설국의 낭만 삿포로 한정 스탬프' }
+        ];
+
+        const MISSIONS_DB = {
+            N5: [
+                {
+                    id: 'n5_1',
+                    title: '편의점에서 도시락 계산하기',
+                    goal: '점원에게 데우기 및 비닐봉투 필요 여부 답하기',
+                    rewardCoins: 120,
+                    icon: '🍱',
+                    turns: [
+                        {
+                            aiRaw: 'いらっしゃいませ！お弁当は温めますか？',
+                            aiRuby: 'いらっしゃいませ！お<ruby>弁当<rt>べんとう</rt></ruby>は<ruby>温<rt>あたた</rt></ruby>めますか？',
+                            aiKo: '어서 오세요! 도시락은 데워 드릴까요?',
+                            hintJp: 'はい、お願いします。',
+                            hintKo: '네, 부탁합니다.',
+                            options: ['はい、お願いします。', 'いいえ、大丈夫です。'],
+                            feedbackGood: '자연스러워요! 「お願いします(부탁합니다)」는 편의점 필수 표현입니다.'
+                        },
+                        {
+                            aiRaw: 'かしこまりました。レジ袋はご利用ですか？',
+                            aiRuby: 'かしこまりました。レジ<ruby>袋<rt>ぶくろ</rt></ruby>はご<ruby>利用<rt>りよう</rt></ruby>ですか？',
+                            aiKo: '알겠습니다. 비닐봉투는 이용하시겠습니까?',
+                            hintJp: 'いいえ、袋はいりません。',
+                            hintKo: '아니요, 봉투는 필요 없어요.',
+                            options: ['いいえ、袋はいりません。', 'はい、一枚ください。'],
+                            feedbackGood: '완벽해요! 「いりません(필요 없습니다)」로 명확하게 의사 표현을 했습니다.'
+                        },
+                        {
+                            aiRaw: 'お会計は580円になります。ありがとうございました！',
+                            aiRuby: 'お<ruby>会計<rt>かいけい</rt></ruby>は580<ruby>円<rt>えん</rt></ruby>になります。ありがとうございました！',
+                            aiKo: '계산은 580엔입니다. 감사합니다!',
+                            hintJp: 'どうもありがとうございます。',
+                            hintKo: '대단히 감사합니다.',
+                            options: ['どうもありがとうございます。', 'カードで払います。'],
+                            feedbackGood: '미션 성공! 일본 편의점 계산 회화를 완벽히 마스터하셨습니다.'
+                        }
+                    ]
+                },
+                {
+                    id: 'n5_2',
+                    title: '라멘 가게에서 메뉴 주문하기',
+                    goal: '인원수를 말하고 돈코츠 라멘 1그릇 주문하기',
+                    rewardCoins: 140,
+                    icon: '🍜',
+                    turns: [
+                        {
+                            aiRaw: 'いらっしゃいませ！何名様ですか？',
+                            aiRuby: 'いらっしゃいませ！<ruby>何名様<rt>なんめいさま</rt></ruby>ですか？',
+                            aiKo: '어서 오세요! 몇 분이신가요?',
+                            hintJp: '一人です。',
+                            hintKo: '한 명입니다.',
+                            options: ['一人です。', '二人です。'],
+                            feedbackGood: '정확해요! 1명은 「ひとり」、2명은 「ふたり」라고 읽습니다.'
+                        },
+                        {
+                            aiRaw: 'カウンター席へどうぞ。ご注文はお決まりですか？',
+                            aiRuby: 'カウンター<ruby>席<rt>せき</rt></ruby>へどうぞ。ご<ruby>注文<rt>ちゅうもん</rt></ruby>はお<ruby>決<rt>き</rt></ruby>まりですか？',
+                            aiKo: '카운터석으로 앉으세요. 주문은 정하셨나요?',
+                            hintJp: 'とんこつラーメンを一つください。',
+                            hintKo: '돈코츠 라멘 하나 주세요.',
+                            options: ['とんこつラーメンを一つください。', 'おすすめは何ですか？'],
+                            feedbackGood: '「〜を一つください」는 식당 주문의 필수 패턴입니다!'
+                        }
+                    ]
+                },
+                {
+                    id: 'n5_3',
+                    title: '도쿄역 가는 길 묻기',
+                    goal: '행인에게 역 위치를 정중히 물어보기',
+                    rewardCoins: 150,
+                    icon: '🚉',
+                    turns: [
+                        {
+                            aiRaw: 'はい、どうしましたか？',
+                            aiRuby: 'はい、どうしましたか？',
+                            aiKo: '네, 무슨 일이신가요?',
+                            hintJp: 'すみません、東京駅はどこですか？',
+                            hintKo: '실례합니다, 도쿄역은 어디인가요?',
+                            options: ['すみません、東京駅はどこですか？', '駅までどうやって行きますか？'],
+                            feedbackGood: '「すみません」으로 말을 걸고 「〜はどこですか」로 위치를 정확히 물었어요!'
+                        },
+                        {
+                            aiRaw: 'この道をまっすぐ行って、左に曲がってください。歩いて5分です。',
+                            aiRuby: 'この<ruby>道<rt>みち</rt></ruby>をまっすぐ<ruby>行<rt>い</rt></ruby>って、<ruby>左<rt>ひだり</rt></ruby>に<ruby>曲<rt>ま</rt></ruby>がってください。<ruby>歩<rt>ある</rt></ruby>いて5<ruby>分<rt>ふん</rt></ruby>です。',
+                            aiKo: '이 길을 똑바로 가서 왼쪽으로 돌아주세요. 걸어서 5분입니다.',
+                            hintJp: '分かりました。ありがとうございます！',
+                            hintKo: '알겠습니다. 감사합니다!',
+                            options: ['分かりました。ありがとうございます！', '歩いて5分ですね。助かります！'],
+                            feedbackGood: '훌륭합니다! 방향 안내를 듣고 자연스럽게 감사 인사를 전했습니다.'
+                        }
+                    ]
+                }
+            ],
+            N4: [
+                {
+                    id: 'n4_1',
+                    title: '일본 병원에서 증상 설명하기',
+                    goal: '어제부터 열이 나고 목이 아프다고 설명하기',
+                    rewardCoins: 180,
+                    icon: '🏥',
+                    turns: [
+                        {
+                            aiRaw: '今日はどうされましたか？いつから症状がありますか？',
+                            aiRuby: '<ruby>今日<rt>きょう</rt></ruby>はどうされましたか？いつから<ruby>症状<rt>しょうじょう</rt></ruby>がありますか？',
+                            aiKo: '오늘 어떻게 오셨나요? 언제부터 증상이 있었나요?',
+                            hintJp: '昨日の夜から熱があって、喉が痛いです。',
+                            hintKo: '어젯밤부터 열이 나고 목이 아파요.',
+                            options: ['昨日の夜から熱があって、喉が痛いです。', '頭が痛くて、咳も出ます。'],
+                            feedbackGood: '「〜て、〜(원인/나열)」 연결형을 아주 잘 활용했습니다!'
+                        },
+                        {
+                            aiRaw: '風邪ですね。薬を出しますので、食後に飲んでください。お大事に。',
+                            aiRuby: '<ruby>風邪<rt>かぜ</rt></ruby>ですね。<ruby>薬<rt>くすり</rt></ruby>を<ruby>出<rt>だ</rt></ruby>しますので、<ruby>食後<rt>しょくご</rt></ruby>に<ruby>飲<rt>の</rt></ruby>んでください。お<ruby>大事<rt>だいじ</rt></ruby>に。',
+                            aiKo: '감기네요. 약을 처방해 드릴 테니 식후에 드세요. 몸조리 잘하세요.',
+                            hintJp: 'ありがとうございました。お大事にします。',
+                            hintKo: '감사합니다. 잘 조리하겠습니다.',
+                            options: ['ありがとうございました。', '薬は1日何回飲みますか？'],
+                            feedbackGood: '실전 병원 회화 클리어!'
+                        }
+                    ]
+                },
+                {
+                    id: 'n4_2',
+                    title: '호텔 체크인 및 짐 보관 요청',
+                    goal: '예약자 이름을 말하고 체크인 전 짐 맡기기',
+                    rewardCoins: 200,
+                    icon: '🏨',
+                    turns: [
+                        {
+                            aiRaw: 'いらっしゃいませ。ご予約のお名前をお伺いできますか？',
+                            aiRuby: 'いらっしゃいませ。ご<ruby>予約<rt>よやく</rt></ruby>のお<ruby>名前<rt>なまえ</rt></ruby>をお<ruby>伺<rt>うかが</rt></ruby>いできますか？',
+                            aiKo: '어서 오세요. 예약하신 성함을 여쭤봐도 될까요?',
+                            hintJp: 'キムと申します。荷物を預かってもらえますか？',
+                            hintKo: '김이라고 합니다. 짐을 맡아 주실 수 있나요?',
+                            options: ['キムと申します。荷物を預かってもらえますか？', '今日から2泊予約したキムです。'],
+                            feedbackGood: '「〜てもらえますか(해주실 수 있나요?)」 N4 핵심 부탁 표현이 훌륭합니다!'
+                        },
+                        {
+                            aiRaw: 'はい、喜んでお預かりいたします。チェックインは15時からでございます。',
+                            aiRuby: 'はい、<ruby>喜<rt>よろこ</rt></ruby>んでお<ruby>預<rt>あず</rt></ruby>かりいたします。チェックインは15<ruby>時<rt>じ</rt></ruby>からでございます。',
+                            aiKo: '네, 기꺼이 맡아 드리겠습니다. 체크인은 15시부터입니다.',
+                            hintJp: '助かります。15時頃に戻ります。',
+                            hintKo: '덕분에 살았네요. 15시쯤 돌아오겠습니다.',
+                            options: ['助かります。15時頃に戻ります。', 'Wi-Fiのパスワードも教えてください。'],
+                            feedbackGood: '매끄러운 호텔 체크인 대화였습니다!'
+                        }
+                    ]
+                }
+            ],
+            N3: [
+                {
+                    id: 'n3_1',
+                    title: '일본 카페 아르바이트 면접',
+                    goal: '지원 동기와 일할 수 있는 요일 어필하기',
+                    rewardCoins: 260,
+                    icon: '☕',
+                    turns: [
+                        {
+                            aiRaw: 'うちのカフェに応募してくれた理由を教えてもらえますか？',
+                            aiRuby: 'うちのカフェに<ruby>応募<rt>おうぼ</rt></ruby>してくれた<ruby>理由<rt>りゆう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>てもらえますか？',
+                            aiKo: '저희 카페에 지원해 준 이유를 알려줄 수 있나요?',
+                            hintJp: 'コーヒーが好きで、接客の経験を積みたいと思ったからです。',
+                            hintKo: '커피를 좋아하고, 접객 경험을 쌓고 싶다고 생각했기 때문입니다.',
+                            options: ['コーヒーが好きで、接客の経験を積みたいと思ったからです。', '家の近くで通いやすいからです。'],
+                            feedbackGood: '「〜と思ったからです」는 면접에서 이유를 밝힐 때 매우 좋습니다.'
+                        },
+                        {
+                            aiRaw: '素晴らしいですね。週に何日くらいシフトに入れますか？',
+                            aiRuby: '<ruby>素晴<rt>すば</rt></ruby>らしいですね。<ruby>週<rt>しゅう</rt></ruby>に<ruby>何日<rt>なんにち</rt></ruby>くらいシフトに<ruby>入<rt>はい</rt></ruby>れますか？',
+                            aiKo: '훌륭하네요. 일주일에 며칠 정도 근무에 들어갈 수 있나요?',
+                            hintJp: '平日なら週3日、土日も入ることができます。',
+                            hintKo: '평일이라면 주 3일, 주말도 들어갈 수 있습니다.',
+                            options: ['平日なら週3日、土日も入ることができます。', 'テスト期間以外はいつでも大丈夫です。'],
+                            feedbackGood: '「〜なら(라면)」 조건 표현을 자연스럽게 사용했습니다!'
+                        }
+                    ]
+                }
+            ],
+            N2: [
+                {
+                    id: 'n2_1',
+                    title: '거래처와 미팅 일정 조율하기',
+                    goal: '비즈니스 경어를 사용해 다음 주 화요일 오후 제안하기',
+                    rewardCoins: 350,
+                    icon: '💼',
+                    turns: [
+                        {
+                            aiRaw: 'いつも大変お世話になっております。来週のお打ち合わせの件ですが、ご都合はいかがでしょうか。',
+                            aiRuby: '',
+                            aiKo: '항상 대단히 신세 많이 지고 있습니다. 다음 주 미팅 건입니다만, 시간 어떠신지요.',
+                            hintJp: 'お世話になっております。来週の火曜日の午後でしたら調整可能です。',
+                            hintKo: '신세 지고 있습니다. 다음 주 화요일 오후라면 조율 가능합니다.',
+                            options: ['お世話になっております。来週の火曜日の午後でしたら調整可能です。', '来週は少し立て込んでおりまして、再来週はいかがでしょうか。'],
+                            feedbackGood: '비즈니스 인사 「お世話になっております」와 「〜でしたら調整可能です」가 완벽합니다.'
+                        }
+                    ]
+                }
+            ],
+            N1: [
+                {
+                    id: 'n1_1',
+                    title: '임원 최종 압박 면접 대응',
+                    goal: '실패 경험을 논리적으로 극복 사례로 전환하기',
+                    rewardCoins: 500,
+                    icon: '👔',
+                    turns: [
+                        {
+                            aiRaw: 'これまでのキャリアの中で、最も困難だった挫折経験と、そこから得た教訓を簡潔に述べてください。',
+                            aiRuby: '',
+                            aiKo: '지금까지의 커리어 중 가장 곤란했던 좌절 경험과, 그로부터 얻은 교훈을 간결히 말씀해 주십시오.',
+                            hintJp: '新規事業の立ち上げで失敗を経験しましたが、現場の声に耳を傾ける重要性を痛感いたしました。',
+                            hintKo: '신규 사업 런칭에서 실패를 경험했으나, 현장의 목소리에 귀를 기울이는 중요성을 통감했습니다.',
+                            options: ['新規事業の立ち上げで失敗を経験しましたが、現場の声に耳を傾ける重要性を痛感いたしました。', '挫折を糧にし、客観的なデータ分析とチーム連携を徹底する姿勢を培いました。'],
+                            feedbackGood: '「耳を傾ける(귀를 기울이다)」「痛感いたしました」 등 N1급 고급 어휘 구사력이 탁월합니다!'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const FREE_ROOM_TOPICS = [
+            { label: '👋 가벼운 인사', user: 'こんにちは！今日もよろしくお願いします。', ai: 'こんにちは！元気そうで何よりなのだ。今日はどんなことを話したい？' },
+            { label: '🍣 좋아하는 음식', user: '日本のラーメンとお寿司が大好きです！', ai: 'おお、最高だね！特に何ラーメンが一番好きなのかな？' },
+            { label: '✈️ 도쿄 여행 계획', user: '来月、初めて東京へ旅行に行く予定です。', ai: 'わあ、楽しみだね！浅草や渋谷にはぜひ行ってみてほしいな！' }
+        ];
+
+        /* =========================================================================
+           2. 상태 관리 (localStorage 영구 저장)
+           ========================================================================= */
+        const DEFAULT_STATE = {
+            currentLevel: 'N5',
+            coins: 250,
+            stars: 0,
+            activeTutorId: 'zundamon',
+            unlockedTutors: ['zundamon'],
+            unlockedStamps: [],
+            clearedMissions: {},
+            voicevoxUrl: 'http://localhost:50021'
+        };
+
+        let appState = loadState();
+        let voicevoxConnected = false;
+        let currentMission = null;
+        let currentTurnIndex = 0;
+        let hintUsedInMission = false;
+        let isRecording = false;
+        let activeMicMode = 'mission'; // 'mission' or 'freeroom'
+        let recognition = null;
+
+        function validateProgress(value) {
+            if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('잘못된 백업 형식');
+            const knownMissions = new Set(Object.values(MISSIONS_DB).flat().map(m => m.id));
+            const knownTutors = new Set(AI_TUTORS.map(t => t.id));
+            const knownStamps = new Set(TRAVEL_STAMPS.map(t => t.id));
+            const cleared = {};
+            if (value.clearedMissions && typeof value.clearedMissions === 'object') {
+                for (const [id, score] of Object.entries(value.clearedMissions)) {
+                    if (knownMissions.has(id) && Number.isInteger(score) && score >= 1 && score <= 3) cleared[id] = score;
+                }
+            }
+            const unlockedTutors = [...new Set(['zundamon', ...(Array.isArray(value.unlockedTutors) ? value.unlockedTutors.filter(id => knownTutors.has(id)) : [])])];
+            const unlockedStamps = [...new Set(Array.isArray(value.unlockedStamps) ? value.unlockedStamps.filter(id => knownStamps.has(id)) : [])];
+            const currentLevel = Object.hasOwn(JLPT_LEVELS, value.currentLevel) ? value.currentLevel : 'N5';
+            const voicevoxUrl = typeof value.voicevoxUrl === 'string' && /^https?:\/\//.test(value.voicevoxUrl) ? value.voicevoxUrl.slice(0, 300) : DEFAULT_STATE.voicevoxUrl;
+            return {
+                ...DEFAULT_STATE, currentLevel,
+                coins: Number.isSafeInteger(value.coins) && value.coins >= 0 ? Math.min(value.coins, 10000000) : DEFAULT_STATE.coins,
+                stars: Object.values(cleared).reduce((a,b)=>a+b,0),
+                activeTutorId: knownTutors.has(value.activeTutorId) && unlockedTutors.includes(value.activeTutorId) ? value.activeTutorId : 'zundamon',
+                unlockedTutors, unlockedStamps, clearedMissions: cleared, voicevoxUrl
+            };
+        }
+
+        const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        let sessionToken = 0;
+        let missionBusy = false;
+        let activeAudio = null;
+        let activeAudioUrl = null;
+        let audioAbort = null;
+        let speechToken = 0;
+        function stopAllSpeech() {
+            speechToken++;
+            if (audioAbort) { audioAbort.abort(); audioAbort = null; }
+            if (activeAudio) { activeAudio.pause(); activeAudio.removeAttribute('src'); activeAudio.load(); activeAudio = null; }
+            if (activeAudioUrl) { URL.revokeObjectURL(activeAudioUrl); activeAudioUrl = null; }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('nihongo_quest_mobile_v2');
+                return saved ? validateProgress(JSON.parse(saved)) : { ...DEFAULT_STATE };
+            } catch (e) {
+                return { ...DEFAULT_STATE };
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('nihongo_quest_mobile_v2', JSON.stringify(appState));
+            } catch (e) {
+                console.warn('Storage save failed', e);
+            }
+            updateHeaderStats();
+        }
+
+        /* =========================================================================
+           3. VOICEVOX 엔진 연결 & 모바일 Web Speech API 스마트 폴백
+           ========================================================================= */
+        async function checkVoicevoxConnection(showNotify = false) {
+            const dot = document.getElementById('vv-status-dot');
+            const label = document.getElementById('vv-status-label');
+            const settingsBadge = document.getElementById('settings-vv-badge');
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1600);
+                const res = await fetch(`${appState.voicevoxUrl}/version`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (res.ok) {
+                    const ver = await res.text();
+                    voicevoxConnected = true;
+                    dot.className = 'w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_6px_#34d399]';
+                    label.textContent = `VOICEVOX v${ver.replace(/"/g, '')}`;
+                    if (settingsBadge) {
+                        settingsBadge.textContent = `연결됨 (v${ver.replace(/"/g, '')})`;
+                        settingsBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700';
+                    }
+                    if (showNotify) showToast('VOICEVOX 음성 서버와 연결되었습니다!', 'success');
+                    return true;
+                }
+            } catch (err) {
+                voicevoxConnected = false;
+            }
+
+            dot.className = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
+            label.textContent = '모바일 AI 음성 모드';
+            if (settingsBadge) {
+                settingsBadge.textContent = '모바일 AI 음성 자동전환';
+                settingsBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700';
+            }
+            if (showNotify) {
+                showToast('VOICEVOX 서버 미연결 상태이므로 모바일 내장 일본어 AI 음성을 사용합니다.', 'info');
+            }
+            return false;
+        }
+
+        /* 음성용 문장: 화면 표기는 유지하고 기호/한자 독음만 음성 입력에서 교정 */
+        const SPEECH_READING_OVERRIDES = new Map([
+            ['いつも大変お世話になっております。来週のお打ち合わせの件ですが、ご都合はいかがでしょうか。', 'いつもたいへんおせわになっております。らいしゅうのおうちあわせのけんですが、ごつごうはいかがでしょうか。'],
+            ['これまでのキャリアの中で、最も困難だった挫折経験と、そこから得た教訓を簡潔に述べてください。', 'これまでのキャリアのなかで、もっともこんなんだったざせつけいけんと、そこからえたきょうくんをかんけつにのべてください。'],
+            ['お会計は580円になります。ありがとうございました！', 'おかいけいはごひゃくはちじゅうえんになります。ありがとうございました。'],
+            ['この道をまっすぐ行って、左に曲がってください。歩いて5分です。', 'このみちをまっすぐいって、ひだりにまがってください。あるいてごふんです。'],
+            ['はい、喜んでお預かりいたします。チェックインは15時からでございます。', 'はい、よろこんでおあずかりいたします。チェックインはじゅうごじからでございます。'],
+            ['素晴らしいですね。週に何日くらいシフトに入れますか？', 'すばらしいですね。しゅうになんにちくらいシフトにはいれますか。']
+        ]);
+
+        function speechFromRuby(rubyHtml) {
+            if (!rubyHtml || !rubyHtml.includes('<ruby>')) return '';
+            const el = document.createElement('div');
+            el.innerHTML = rubyHtml;
+            el.querySelectorAll('ruby').forEach(ruby => {
+                const rt = ruby.querySelector('rt');
+                if (rt) ruby.replaceWith(document.createTextNode(rt.textContent.trim()));
+            });
+            return el.textContent || '';
+        }
+
+        function prepareSpeechText(text, rubyHtml = '') {
+            const original = String(text || '');
+            const knownRuby = rubyHtml || Object.values(MISSIONS_DB).flat().flatMap(m => m.turns).find(t => t.aiRaw === original)?.aiRuby || '';
+            let spoken = SPEECH_READING_OVERRIDES.get(original) || speechFromRuby(knownRuby) || original;
+            // 문장부호를 '느낌표', '물음표' 등으로 읽지 않도록 음성용 문자열에서 제거.
+            // 일본어 쉼표와 마침표는 호흡을 위한 구분자로만 사용.
+            spoken = spoken.replace(/[!！?？‼⁉❗❓¡¿]/g, '。')
+                .replace(/[「」『』“”"‘’《》〈〉【】\[\]{}]/g, '')
+                .replace(/[~～…⋯・]/g, '、')
+                .replace(/。{2,}/g, '。')
+                .replace(/、{2,}/g, '、')
+                .replace(/\s+/g, ' ')
+                .trim();
+            return spoken;
+        }
+
+        async function speakJapanese(text, customSpeakerId = null, customPitch = null, rubyHtml = '') {
+            const tutor = AI_TUTORS.find(t => t.id === appState.activeTutorId) || AI_TUTORS[0];
+            const levelConfig = JLPT_LEVELS[appState.currentLevel] || JLPT_LEVELS.N5;
+            const speakerId = customSpeakerId !== null ? customSpeakerId : tutor.speakerId;
+            const pitch = customPitch !== null ? customPitch : tutor.pitch;
+            const spokenText = prepareSpeechText(text, rubyHtml);
+            if (!spokenText) return;
+
+            stopAllSpeech();
+            const mySpeechToken = speechToken;
+            // 1순위: VOICEVOX 서버 호출
+            if (voicevoxConnected) {
+                try {
+                    audioAbort = new AbortController();
+                    const signal = audioAbort.signal;
+                    const queryRes = await fetch(
+                        `${appState.voicevoxUrl}/audio_query?text=${encodeURIComponent(spokenText)}&speaker=${speakerId}`,
+                        { method: 'POST', signal }
+                    );
+                    if (!queryRes.ok) throw new Error('Audio query failed');
+                    const queryJson = await queryRes.json();
+                    queryJson.speedScale = levelConfig.rate;
+
+                    const synthRes = await fetch(
+                        `${appState.voicevoxUrl}/synthesis?speaker=${speakerId}`,
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(queryJson), signal
+                        }
+                    );
+                    if (!synthRes.ok) throw new Error('Synthesis failed');
+
+                    const wavBlob = await synthRes.blob();
+                    if (mySpeechToken !== speechToken) return;
+                    activeAudioUrl = URL.createObjectURL(wavBlob);
+                    activeAudio = new Audio(activeAudioUrl);
+                    const audio = activeAudio;
+                    const url = activeAudioUrl;
+                    const cleanup = () => {
+                        if (activeAudio === audio) activeAudio = null;
+                        if (activeAudioUrl === url) activeAudioUrl = null;
+                        URL.revokeObjectURL(url);
+                    };
+                    audio.addEventListener('ended', cleanup, {once:true});
+                    audio.addEventListener('error', cleanup, {once:true});
+                    await audio.play();
+                    return;
+                } catch (e) {
+                    if (mySpeechToken !== speechToken || e.name === 'AbortError') return;
+                    voicevoxConnected = false;
+                    checkVoicevoxConnection(false);
+                }
+            }
+
+            // 2순위: 스마트폰 내장 일본어 음성 합성(Web Speech API)
+            if (mySpeechToken !== speechToken) return;
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                utterance.lang = 'ja-JP';
+                utterance.rate = levelConfig.rate;
+                utterance.pitch = pitch;
+
+                const voices = window.speechSynthesis.getVoices();
+                const jpVoice = voices.find(v => v.lang.includes('ja') && (v.name.includes('Google') || v.name.includes('Kyoko') || v.name.includes('O-Ren') || v.name.includes('Nanami')))
+                             || voices.find(v => v.lang.includes('ja'));
+                if (jpVoice) utterance.voice = jpVoice;
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast('이 기기는 음성 출력을 지원하지 않습니다.', 'error');
+            }
+        }
+
+        /* =========================================================================
+           4. 음성 인식 (STT - 실시간 자막 프리뷰 지원)
+           ========================================================================= */
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ja-JP';
+            recognition.interimResults = true; // 말하는 도중 실시간 자막 표시
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                if (activeMicMode === 'mission') {
+                    document.getElementById('mic-pulse').classList.remove('hidden');
+                    document.getElementById('mic-icon').className = 'fa-solid fa-stop text-xl relative z-10';
+                    document.getElementById('mic-btn-label').textContent = '듣고 있어요... (터치 시 완료)';
+                    document.getElementById('stt-live-banner').classList.remove('hidden');
+                    document.getElementById('stt-interim-text').textContent = '일본어로 말씀해 주세요...';
+                } else {
+                    document.getElementById('mic-pulse-freeroom').classList.remove('hidden');
+                    document.getElementById('mic-icon-freeroom').className = 'fa-solid fa-stop text-lg relative z-10';
+                }
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+
+                if (activeMicMode === 'mission') {
+                    if (interim) document.getElementById('stt-interim-text').textContent = interim;
+                    if (finalTranscript && !missionBusy) {
+                        document.getElementById('chat-text-input').value = finalTranscript;
+                        showToast('음성 인식 결과를 확인한 다음 전송 버튼을 누르세요.', 'info');
+                    }
+                } else if (finalTranscript) {
+                    document.getElementById('freeroom-input').value = finalTranscript;
+                    showToast('인식된 문장을 확인하고 전송하세요.', 'info');
+                }
+            };
+
+            recognition.onerror = (event) => {
+                stopRecordingUI();
+                if (event.error === 'not-allowed') {
+                    showToast('마이크 권한이 필요합니다. 하단 추천 문장이나 키보드를 이용해 주세요.', 'error');
+                }
+            };
+
+            recognition.onend = () => {
+                stopRecordingUI();
+            };
+        }
+
+        function toggleSpeechRecognition(mode = 'mission') {
+            if (!recognition) {
+                showToast('현재 모바일 브라우저에서 음성 인식이 제한됩니다. 추천 문장 칩을 터치해 대화해보세요!', 'info');
+                return;
+            }
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                activeMicMode = mode;
+                try {
+                    recognition.start();
+                } catch (e) {
+                    stopRecordingUI();
+                }
+            }
+        }
+
+        function stopRecordingUI() {
+            isRecording = false;
+            document.getElementById('mic-pulse').classList.add('hidden');
+            document.getElementById('mic-icon').className = 'fa-solid fa-microphone text-xl relative z-10';
+            document.getElementById('mic-btn-label').textContent = '터치해서 일본어로 말하기';
+            document.getElementById('stt-live-banner').classList.add('hidden');
+
+            document.getElementById('mic-pulse-freeroom').classList.add('hidden');
+            document.getElementById('mic-icon-freeroom').className = 'fa-solid fa-microphone text-lg relative z-10';
+        }
+
+        /* =========================================================================
+           5. 네비게이션 및 UI 렌더링
+           ========================================================================= */
+        function switchTab(tabName) {
+            ['missions', 'freeroom', 'shop', 'settings'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                const navBtn = document.getElementById(`nav-${t}`);
+                navBtn.classList.remove('text-indigoJp-600', 'font-extrabold');
+                navBtn.classList.add('text-slate-400', 'font-semibold');
+            });
+
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            activeNav.classList.remove('text-slate-400', 'font-semibold');
+            activeNav.classList.add('text-indigoJp-600', 'font-extrabold');
+
+            if (tabName === 'freeroom') initFreeRoom();
+            if (tabName === 'shop') renderShop();
+            if (tabName === 'settings') renderSettings();
+        }
+
+        function updateHeaderStats() {
+            const totalStars = Object.values(appState.clearedMissions).reduce((sum, s) => sum + s, 0);
+            appState.stars = totalStars;
+            document.getElementById('total-stars').textContent = totalStars;
+            document.getElementById('total-coins').textContent = appState.coins;
+        }
+
+        function renderJlptSelector() {
+            const container = document.getElementById('jlpt-selector');
+            container.innerHTML = '';
+
+            Object.keys(JLPT_LEVELS).forEach(lvl => {
+                const isSelected = appState.currentLevel === lvl;
+                const btn = document.createElement('button');
+                btn.className = `flex-1 min-w-[64px] py-2.5 px-2 rounded-2xl font-black text-xs transition flex flex-col items-center justify-center touch-btn ${
+                    isSelected 
+                    ? 'bg-indigoJp-600 text-white shadow-md' 
+                    : 'bg-slate-100 text-slate-600'
+                }`;
+                btn.innerHTML = `
+                    <span>${lvl}</span>
+                    <span class="text-[9px] font-medium mt-0.5 ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">${JLPT_LEVELS[lvl].name}</span>
+                `;
+                btn.onclick = () => {
+                    appState.currentLevel = lvl;
+                    saveState();
+                    renderJlptSelector();
+                    renderMissions();
+                };
+                container.appendChild(btn);
+            });
+
+            const currentCfg = JLPT_LEVELS[appState.currentLevel];
+            document.getElementById('level-badge-desc').textContent = currentCfg.desc;
+        }
+
+        function renderActiveTutorBanner() {
+            const tutor = AI_TUTORS.find(t => t.id === appState.activeTutorId) || AI_TUTORS[0];
+            document.getElementById('active-tutor-avatar').textContent = tutor.avatar;
+            document.getElementById('active-tutor-name').textContent = tutor.name;
+            document.getElementById('active-tutor-desc').textContent = tutor.desc;
+            document.getElementById('active-tutor-vv-id').textContent = `VOICEVOX #${tutor.speakerId}`;
+        }
+
+        function renderMissions() {
+            renderActiveTutorBanner();
+            const container = document.getElementById('mission-list-container');
+            const missions = MISSIONS_DB[appState.currentLevel] || [];
+            container.innerHTML = '';
+
+            missions.forEach((m, idx) => {
+                const earnedStars = appState.clearedMissions[m.id] || 0;
+                const isCleared = earnedStars > 0;
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-3xl p-4 border-2 transition shadow-sm ${
+                    isCleared ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200'
+                }`;
+
+                let starsHtml = '';
+                for (let i = 1; i <= 3; i++) {
+                    starsHtml += `<i class="fa-solid fa-star text-xs ${i <= earnedStars ? 'text-amber-400' : 'text-slate-200'}"></i>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-13 h-13 w-12 h-12 rounded-2xl ${isCleared ? 'bg-emerald-100' : 'bg-indigoJp-50'} flex items-center justify-center text-2xl shrink-0">
+                            ${m.icon}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-black text-indigoJp-600 bg-indigoJp-50 px-2 py-0.5 rounded-md">STAGE 0${idx + 1}</span>
+                                <div class="flex gap-0.5">${starsHtml}</div>
+                            </div>
+                            <h3 class="text-sm font-extrabold text-slate-800 mt-1 truncate">${m.title}</h3>
+                            <p class="text-[11px] text-slate-500 mt-0.5 leading-snug">${m.goal}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1.5 text-xs font-extrabold text-amber-600">
+                            <span class="w-4 h-4 rounded-full bg-goldCoin-500 text-white text-[9px] flex items-center justify-center">¥</span>
+                            <span>+${m.rewardCoins} 보상</span>
+                        </div>
+                        <button onclick="startMission('${m.id}')" class="px-5 py-2.5 rounded-2xl font-extrabold text-xs text-white game-btn ${
+                            isCleared ? 'bg-emerald-500' : 'bg-indigoJp-600'
+                        }">
+                            ${isCleared ? '다시 도전' : '회화 시작'} <i class="fa-solid fa-play text-[10px] ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================================
+           6. 실시간 회화 미션 & 바텀 시트 로직
+           ========================================================================= */
+        function startMission(missionId) {
+            const missions = MISSIONS_DB[appState.currentLevel];
+            currentMission = missions.find(m => m.id === missionId);
+            if (!currentMission) return;
+
+            sessionToken++;
+            missionBusy = false;
+            stopAllSpeech();
+            currentTurnIndex = 0;
+            hintUsedInMission = false;
+
+            document.getElementById('chat-level-tag').textContent = appState.currentLevel;
+            document.getElementById('chat-mission-title').textContent = currentMission.title;
+            document.getElementById('chat-mission-goal').textContent = `목표: ${currentMission.goal}`;
+            document.getElementById('chat-potential-stars').textContent = '3';
+            document.getElementById('chat-messages').innerHTML = '';
+
+            document.getElementById('conversation-screen').classList.remove('hidden');
+            triggerAiTurn();
+        }
+
+        function closeConversation() {
+            sessionToken++;
+            missionBusy = false;
+            stopAllSpeech();
+            if (isRecording && recognition) recognition.stop();
+            document.getElementById('conversation-screen').classList.add('hidden');
+        }
+
+        function triggerAiTurn() {
+            if (!currentMission || document.getElementById('conversation-screen').classList.contains('hidden')) return;
+            missionBusy = false;
+            const turn = currentMission.turns[currentTurnIndex];
+            if (!turn) return;
+            const totalTurns = currentMission.turns.length;
+
+            document.getElementById('chat-turn-counter').textContent = `${currentTurnIndex + 1} / ${totalTurns} 턴`;
+            document.getElementById('chat-progress-bar').style.width = `${(currentTurnIndex / totalTurns) * 100}%`;
+
+            const levelCfg = JLPT_LEVELS[appState.currentLevel];
+            const displayJp = (levelCfg.furigana === 'none' || !turn.aiRuby) ? turn.aiRaw : turn.aiRuby;
+            appendAiBubble('chat-messages', displayJp, turn.aiRaw, turn.aiKo);
+
+            speakJapanese(turn.aiRaw, null, null, turn.aiRuby);
+
+            renderQuickReplies(turn.options);
+            document.getElementById('hint-jp-text').textContent = turn.hintJp;
+            document.getElementById('hint-ko-text').textContent = turn.hintKo;
+        }
+
+        function appendAiBubble(containerId, htmlJp, rawJp, koText) {
+            const tutor = AI_TUTORS.find(t => t.id === appState.activeTutorId) || AI_TUTORS[0];
+            const box = document.getElementById(containerId);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex items-start gap-2.5 animate-pop-in';
+            const speechRuby = currentMission && currentMission.turns &&
+                currentMission.turns.some(turn => turn.aiRaw === rawJp)
+                ? currentMission.turns.find(turn => turn.aiRaw === rawJp).aiRuby : '';
+            wrapper.innerHTML = `
+                <div class="w-10 h-10 rounded-2xl bg-indigoJp-100 border border-indigoJp-200 flex items-center justify-center text-xl shrink-0 mt-0.5">
+                    ${tutor.avatar}
+                </div>
+                <div class="flex-1 max-w-[82%]">
+                    <div class="text-[10px] font-bold text-slate-400 mb-1">${escapeHTML(tutor.name)}</div>
+                    <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-3.5 shadow-sm">
+                        <p class="font-jp text-sm font-bold text-slate-800 leading-relaxed">${escapeHTML(htmlJp).replace(/&lt;(\/?(?:ruby|rt))&gt;/g, "<$1>")}</p>
+                        ${koText ? `<p class="text-[11px] text-slate-500 mt-1.5 pt-1.5 border-t border-slate-100">${escapeHTML(koText)}</p>` : ''}
+                        <button class="replay-japanese mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-bold text-indigoJp-600 bg-indigoJp-50 px-3 py-1.5 rounded-xl touch-btn">
+                            <i class="fa-solid fa-volume-high"></i> 다시 듣기
+                        </button>
+                    </div>
+                </div>
+            `;
+            box.appendChild(wrapper);
+            const replay = wrapper.querySelector('.replay-japanese');
+            if (replay) replay.addEventListener('click', () => speakJapanese(rawJp, null, null, speechRuby));
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function appendUserBubble(containerId, text, feedback = null) {
+            const box = document.getElementById(containerId);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex flex-col items-end animate-pop-in';
+            wrapper.innerHTML = `
+                <div class="max-w-[82%] bg-indigoJp-600 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
+                    <p class="font-jp text-sm font-bold">${escapeHTML(text)}</p>
+                </div>
+                ${feedback ? `
+                <div class="max-w-[84%] mt-1.5 bg-emerald-50 border border-emerald-200 rounded-2xl px-3 py-2 text-[11px] text-emerald-800 flex items-start gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5 shrink-0"></i>
+                    <span>${escapeHTML(feedback)}</span>
+                </div>` : ''}
+            `;
+            box.appendChild(wrapper);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function renderQuickReplies(options) {
+            const container = document.getElementById('quick-replies');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'shrink-0 bg-indigoJp-50 active:bg-indigoJp-100 text-indigoJp-800 border border-indigoJp-200 px-3.5 py-2 rounded-full text-xs font-jp font-semibold touch-btn';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    document.getElementById('chat-text-input').value = opt;
+                    handleUserTextSubmit();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function toggleQuietDrawer() {
+            const drawer = document.getElementById('quiet-input-drawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function openHintSheet() {
+            document.getElementById('hint-bottom-sheet').classList.remove('hidden');
+            if (!hintUsedInMission) {
+                hintUsedInMission = true;
+                document.getElementById('chat-potential-stars').textContent = '2';
+                showToast('모범답안을 확인했습니다 (클리어 시 최대 ★2개)', 'info');
+            }
+        }
+
+        function closeHintSheet() {
+            document.getElementById('hint-bottom-sheet').classList.add('hidden');
+        }
+
+        function listenHintVoice() {
+            const turn = currentMission.turns[currentTurnIndex];
+            speakJapanese(turn.hintJp);
+        }
+
+        function useHintSample() {
+            const turn = currentMission.turns[currentTurnIndex];
+            closeHintSheet();
+            document.getElementById('chat-text-input').value = turn.hintJp;
+            handleUserTextSubmit();
+        }
+
+        function normalizeAnswer(text) {
+            return String(text || '').normalize('NFKC').toLowerCase()
+                .replace(/[\s、。!！?？「」『』,.~～]/g, '')
+                .replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+        }
+
+        function isAcceptableAnswer(text, turn) {
+            const submitted = normalizeAnswer(text);
+            if (submitted.length < 2) return false;
+            const expected = [turn.hintJp, ...(turn.options || [])];
+            // 검증 가능한 학습용 모범 문장 및 선택지를 인정합니다.
+            // 음성/텍스트에 대해 임의 발화를 무조건 정답 처리하지 않습니다.
+            return expected.some(answer => normalizeAnswer(answer) === submitted);
+        }
+
+        function handleUserTextSubmit() {
+            if (!currentMission || missionBusy || document.getElementById('conversation-screen').classList.contains('hidden')) return;
+            const input = document.getElementById('chat-text-input');
+            const userText = input.value.trim();
+            if (!userText) return;
+            const turn = currentMission.turns[currentTurnIndex];
+            if (!turn) return;
+            const good = isAcceptableAnswer(userText, turn);
+            appendUserBubble('chat-messages', userText, good ? turn.feedbackGood : '아직 정답으로 확인되지 않았습니다. 추천 문장 또는 모범답안을 참고해 다시 시도하세요.');
+            if (!good) { showToast('정답 문장과 일치하지 않습니다. 다시 시도할 수 있어요.', 'info'); return; }
+            input.value = '';
+            missionBusy = true;
+            currentTurnIndex++;
+            const token = sessionToken;
+            if (currentTurnIndex < currentMission.turns.length) {
+                setTimeout(() => { if (token === sessionToken) triggerAiTurn(); }, 750);
+            } else {
+                document.getElementById('chat-progress-bar').style.width = '100%';
+                setTimeout(() => { if (token === sessionToken) completeMission(); }, 850);
+            }
+        }
+
+        function completeMission() {
+            if (!currentMission || document.getElementById('conversation-screen').classList.contains('hidden')) return;
+            const earnedStars = hintUsedInMission ? 2 : 3;
+            const prevStars = appState.clearedMissions[currentMission.id] || 0;
+            if (earnedStars > prevStars) {
+                appState.clearedMissions[currentMission.id] = earnedStars;
+            }
+
+            const reward = prevStars > 0 ? Math.floor(currentMission.rewardCoins * 0.5) : currentMission.rewardCoins;
+            appState.coins += reward;
+            saveState();
+            renderMissions();
+
+            const starsContainer = document.getElementById('clear-stars-display');
+            starsContainer.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                starsContainer.innerHTML += `<i class="fa-solid fa-star ${i <= earnedStars ? 'text-amber-400 drop-shadow' : 'text-slate-200'}"></i>`;
+            }
+
+            document.getElementById('clear-subtitle').textContent = prevStars > 0 
+                ? '복습 완료! 추가 보너스 엔화를 획득했습니다.' 
+                : `[${appState.currentLevel}] ${currentMission.title} 완료!`;
+            document.getElementById('clear-reward-coins').textContent = `+${reward}`;
+            document.getElementById('clear-modal').classList.remove('hidden');
+        }
+
+        function closeClearModal(goToShop) {
+            document.getElementById('clear-modal').classList.add('hidden');
+            closeConversation();
+            if (goToShop) switchTab('shop');
+        }
+
+        /* =========================================================================
+           7. AI 자유 회화실 로직
+           ========================================================================= */
+        // WebLLM: 서버 호출 없는 온디바이스 LLM. 모듈/모델 파일은 최초 실행 시 다운로드.
+        let localAIEngine = null;
+        let localAIState = 'idle'; // idle | loading | ready | error
+        let localAIHistory = [];
+        let localAIRequestId = 0;
+        let localAIChatBusy = false;
+        const LOCAL_AI_MODELS = {
+            small: 'Qwen2.5-0.5B-Instruct-q4f16_1-MLC',
+            quality: 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC'
+        };
+        const LOCAL_AI_SYSTEM = `あなたは日本語会話練習の親切な相手です。学習者の発言の内容を理解して、自然な会話を続けてください。
+日本語で基本的に1～3文で答えてください。最後に関連する質問を一つだけしてください。
+相手が韓国語で書いた場合は短い韓国語の説明と自然な日本語の言い方を教えてから日本語で質問してください。
+誤りがあっても話を止めず、必要なら自然な表現を「自然な言い方：...」と一度だけ短く示してください。
+あなたは現実の店員・友達等の役割を演じることができますが、実在の人間だと主張しないでください。`;
+        function setLocalAIStatus(status, note='', pct=null) {
+            const label = document.getElementById('local-ai-status');
+            const detail = document.getElementById('local-ai-notice');
+            const start = document.getElementById('local-ai-start');
+            const chooser = document.getElementById('local-ai-model');
+            const wrap = document.getElementById('local-ai-progress-wrap');
+            const bar = document.getElementById('local-ai-progress');
+            if (label) {
+                label.textContent = ({idle:'기본 회화 모드', loading:'AI 다운로드/실행 중', ready:'스마트폰 AI 실행 중', error:'AI 실행 실패'})[status] || status;
+                label.className = 'text-[10px] font-bold ' + (status === 'ready' ? 'text-emerald-700' : status === 'error' ? 'text-rose-600' : 'text-amber-700');
+            }
+            if (detail && note) detail.textContent = note;
+            if (start) {start.disabled = status === 'loading';start.textContent = status === 'loading' ? '준비 중…' : status === 'ready' ? 'AI 활성화됨' : 'AI 시작';}
+            if (chooser) chooser.disabled = status === 'loading' || status === 'ready';
+            if (wrap) wrap.classList.toggle('hidden', status !== 'loading');
+            if (bar && pct !== null) bar.style.width = Math.max(0,Math.min(100,pct)) + '%';
+        }
+        async function startLocalAI() {
+            if (localAIState === 'loading' || localAIState === 'ready') return;
+            if (!window.isSecureContext || !navigator.gpu) {
+                localAIState = 'error';
+                setLocalAIStatus('error', '이 브라우저는 WebGPU/보안 연결을 지원하지 않습니다. HTTPS 웹사이트에서 최신 브라우저로 열어주세요. 기본 회화는 계속 사용할 수 있습니다.');
+                return;
+            }
+            localAIState = 'loading';
+            setLocalAIStatus('loading', 'AI 실행 라이브러리를 불러오는 중…', 0);
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                if (!adapter) throw new Error('스마트폰의 GPU가 WebGPU 실행을 지원하지 않습니다.');
+                // CDN import: 유료 API나 계정 없이 실행. HTTPS로 호스팅해야 정상 동작함.
+                const mlc = await import('https://esm.run/@mlc-ai/web-llm');
+                const chosen = LOCAL_AI_MODELS[document.getElementById('local-ai-model').value];
+                const known = mlc.prebuiltAppConfig?.model_list?.some(m => m.model_id === chosen);
+                if (!known) throw new Error('현재 WebLLM 버전에 이 모델이 없습니다.');
+                localAIEngine = await mlc.CreateMLCEngine(chosen, {
+                    initProgressCallback: info => {
+                        if (localAIState !== 'loading') return;
+                        const fraction = typeof info.progress === 'number' ? info.progress * 100 : 0;
+                        setLocalAIStatus('loading', '모델 다운로드 및 준비: ' + (info.text || Math.round(fraction) + '%'), fraction);
+                    }
+                });
+                localAIHistory = [];
+                localAIState = 'ready';
+                setLocalAIStatus('ready', 'AI가 이 스마트폰에서 직접 답변을 생성합니다. API 키·사용료가 없습니다. 최초 다운로드에는 데이터와 저장 공간이 필요합니다.');
+                appendAiBubble('freeroom-messages', '準備ができました！今日は何について話しましょうか？', '準備ができました！今日は何について話しましょうか？', '스마트폰 AI · 준비 완료');
+            } catch(err) {
+                localAIEngine = null;
+                localAIState = 'error';
+                setLocalAIStatus('error', 'AI 시작 실패: ' + (err?.message || String(err)) + ' / 기본 상황형 회화는 계속 이용 가능합니다.');
+            }
+        }
+        function resetLocalAIChat() {
+            localAIHistory = [];
+            localAIRequestId++;
+            const area = document.getElementById('freeroom-messages');
+            if (area) area.innerHTML = '';
+            appendAiBubble('freeroom-messages', 'こんにちは！新しい話を始めましょう。', 'こんにちは！新しい話を始めましょう。', localAIState === 'ready' ? '스마트폰 AI · 대화 초기화' : '기본 상황형 회화');
+        }
+        async function respondFreeRoom(userText) {
+            const token = sessionToken;
+            const requestId = ++localAIRequestId;
+            if (localAIState !== 'ready' || !localAIEngine) {
+                const reply = freeRoomReply(userText);
+                if (token !== sessionToken) return;
+                appendAiBubble('freeroom-messages', reply, reply, '기본 상황형 회화 · 생성형 AI 아님');
+                speakJapanese(reply);
+                return;
+            }
+            if (localAIChatBusy) {
+                showToast('AI가 답변을 만드는 중입니다. 잠시 후 다시 말해주세요.', 'info');
+                return;
+            }
+            localAIChatBusy = true;
+            setLocalAIStatus('ready', '스마트폰에서 답변 생성 중…');
+            try {
+                const recent = localAIHistory.slice(-10);
+                const result = await localAIEngine.chat.completions.create({
+                    messages: [{role:'system',content:LOCAL_AI_SYSTEM}, ...recent, {role:'user',content:userText}],
+                    temperature:0.65, max_tokens:180
+                });
+                const reply = String(result?.choices?.[0]?.message?.content || '').trim();
+                if (!reply) throw new Error('AI 응답이 비어 있습니다.');
+                if (requestId !== localAIRequestId || token !== sessionToken) return;
+                localAIHistory.push({role:'user',content:userText},{role:'assistant',content:reply});
+                localAIHistory = localAIHistory.slice(-12);
+                appendAiBubble('freeroom-messages', reply, reply, '스마트폰 자체 AI · 자유 회화');
+                speakJapanese(reply);
+            } catch(err) {
+                if (requestId === localAIRequestId) {
+                    showToast('AI 답변 오류: ' + (err?.message || String(err)), 'error');
+                    appendAiBubble('freeroom-messages', 'もう一度言ってもらえますか？', 'もう一度言ってもらえますか？', 'AI 오류 · 다시 시도해주세요');
+                }
+            } finally {
+                localAIChatBusy = false;
+                if (localAIState === 'ready') setLocalAIStatus('ready', 'AI가 이 스마트폰에서 실행 중입니다. 실제 생성형 대화가 가능합니다.');
+            }
+        }
+        let freeRoomInitialized = false;
+        function initFreeRoom() {
+            document.getElementById('freeroom-level-pill').textContent = appState.currentLevel;
+            const topicsBox = document.getElementById('freeroom-topics');
+            topicsBox.innerHTML = '';
+            FREE_ROOM_TOPICS.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'shrink-0 bg-indigoJp-50 text-indigoJp-700 border border-indigoJp-200 px-3 py-1.5 rounded-full text-xs font-bold touch-btn';
+                btn.textContent = t.label;
+                btn.onclick = () => {
+                    if (localAIChatBusy) { showToast('AI 답변을 기다려주세요.', 'info'); return; }
+                    appendUserBubble('freeroom-messages', t.user);
+                    respondFreeRoom(t.user);
+                };
+                topicsBox.appendChild(btn);
+            });
+
+            if (!freeRoomInitialized) {
+                freeRoomInitialized = true;
+                const tutor = AI_TUTORS.find(t => t.id === appState.activeTutorId) || AI_TUTORS[0];
+                appendAiBubble('freeroom-messages', tutor.sampleJp, tutor.sampleJp, '기본 상황형 회화입니다. 위의 AI 시작을 눌러 무료 생성형 회화를 활성화하세요.');
+            }
+        }
+
+        function freeRoomReply(text) {
+            const message = String(text).normalize('NFKC');
+            if (/ありがとう|感謝/.test(message)) return 'どういたしまして。ほかに話したいことはありますか？';
+            if (/名前|なまえ|申します/.test(message)) return '私は日本語の練習パートナーです。あなたのお名前は何ですか？';
+            if (/こんにちは|おはよう|こんばんは/.test(message)) return 'こんにちは！今日は何をしましたか？';
+            if (/旅行|東京|大阪|京都|行き|いき|観光/.test(message)) return '旅行は楽しみですね。日本でどこに行きたいですか？';
+            if (/ラーメン|寿司|すし|食べ|たべ|料理|好き|すき/.test(message)) return '日本の料理はおいしいですね。いちばん好きな食べ物は何ですか？';
+            if (/学校|勉強|日本語|勉強し|授業/.test(message)) return '日本語の勉強ですね。どんな表現を練習したいですか？';
+            if (/仕事|会社|会議|働/.test(message)) return 'お仕事についてですね。今日は忙しかったですか？';
+            if (/元気|げんき|疲れ|つかれ/.test(message)) return 'そうなんですね。今日はどんな一日でしたか？';
+            if (/ですか|ますか|？|\?/.test(message)) return 'いい質問ですね。もう少し詳しく教えてもらえますか？';
+            return 'そうなんですね。もう少し詳しく話してもらえますか？';
+        }
+
+        function handleFreeRoomSubmit() {
+            const input = document.getElementById('freeroom-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            if (localAIChatBusy) { showToast('AI가 답변을 만드는 중입니다.', 'info'); return; }
+            appendUserBubble('freeroom-messages', text);
+            respondFreeRoom(text);
+        }
+
+        /* =========================================================================
+           8. 베네핏 상점 & 음성/앱 설정 & 백업/복원
+           ========================================================================= */
+        function renderShop() {
+            const tutorsGrid = document.getElementById('shop-tutors-grid');
+            tutorsGrid.innerHTML = '';
+
+            AI_TUTORS.forEach(t => {
+                const isUnlocked = appState.unlockedTutors.includes(t.id);
+                const isActive = appState.activeTutorId === t.id;
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-3xl p-3.5 border-2 transition flex items-center justify-between gap-3 ${
+                    isActive ? 'border-indigoJp-500 bg-indigoJp-50/30' : 'border-slate-200'
+                }`;
+
+                let actionBtn = '';
+                if (isActive) {
+                    actionBtn = `<span class="px-3.5 py-2 rounded-xl bg-indigoJp-600 text-white text-xs font-extrabold">사용 중</span>`;
+                } else if (isUnlocked) {
+                    actionBtn = `<button onclick="selectTutor('${t.id}')" class="px-3.5 py-2 rounded-xl bg-slate-800 text-white text-xs font-extrabold touch-btn">선택</button>`;
+                } else {
+                    actionBtn = `<button onclick="buyTutor('${t.id}')" class="px-3.5 py-2 rounded-xl bg-goldCoin-500 text-indigoJp-900 text-xs font-black shadow touch-btn">¥${t.price}</button>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl shrink-0">
+                            ${t.avatar}
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-extrabold text-slate-800 truncate">${t.name}</h4>
+                            <p class="text-[10px] text-slate-500 mt-0.5 leading-snug line-clamp-2">${t.desc}</p>
+                            <button onclick="speakJapanese('${t.sampleJp}', ${t.speakerId}, ${t.pitch})" class="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-sakura-500 touch-btn">
+                                <i class="fa-solid fa-circle-play"></i> 미리듣기 (#${t.speakerId})
+                            </button>
+                        </div>
+                    </div>
+                    <div class="shrink-0">${actionBtn}</div>
+                `;
+                tutorsGrid.appendChild(card);
+            });
+
+            const stampsGrid = document.getElementById('shop-stamps-grid');
+            stampsGrid.innerHTML = '';
+            document.getElementById('stamp-progress-text').textContent = `${appState.unlockedStamps.length} / ${TRAVEL_STAMPS.length} 수집`;
+
+            TRAVEL_STAMPS.forEach(s => {
+                const isCollected = appState.unlockedStamps.includes(s.id);
+                const card = document.createElement('div');
+                card.className = `rounded-3xl p-3.5 border-2 text-center transition flex flex-col justify-between ${
+                    isCollected ? 'bg-gradient-to-b from-sakura-50 to-white border-sakura-400 shadow-sm' : 'bg-white border-slate-200'
+                }`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="w-12 h-12 mx-auto rounded-2xl ${isCollected ? 'bg-sakura-100' : 'bg-slate-100 grayscale opacity-60'} flex items-center justify-center text-2xl">
+                            ${s.icon}
+                        </div>
+                        <div class="text-[9px] font-bold text-slate-400 mt-2">${s.region}</div>
+                        <h4 class="text-xs font-black text-slate-800">${s.name}</h4>
+                        <p class="text-[10px] text-slate-500 mt-1 leading-tight">${s.desc}</p>
+                    </div>
+                    <div class="mt-3">
+                        ${isCollected 
+                            ? `<span class="inline-block w-full py-2 rounded-xl bg-sakura-500 text-white text-[10px] font-extrabold"><i class="fa-solid fa-stamp mr-1"></i>획득 완료</span>`
+                            : `<button onclick="buyStamp('${s.id}')" class="w-full py-2 rounded-xl bg-amber-100 text-amber-800 text-xs font-black touch-btn">¥${s.price} 해금</button>`
+                        }
+                    </div>
+                `;
+                stampsGrid.appendChild(card);
+            });
+        }
+
+        function selectTutor(tutorId) {
+            appState.activeTutorId = tutorId;
+            saveState();
+            renderShop();
+            renderActiveTutorBanner();
+            const tutor = AI_TUTORS.find(t => t.id === tutorId);
+            speakJapanese(tutor.sampleJp);
+            showToast(`${tutor.name} 튜터가 선택되었습니다!`, 'success');
+        }
+
+        function buyTutor(tutorId) {
+            const tutor = AI_TUTORS.find(t => t.id === tutorId);
+            if (appState.coins < tutor.price) {
+                showToast(`엔화가 부족합니다! (필요: ¥${tutor.price})`, 'error');
+                return;
+            }
+            appState.coins -= tutor.price;
+            appState.unlockedTutors.push(tutorId);
+            appState.activeTutorId = tutorId;
+            saveState();
+            renderShop();
+            renderActiveTutorBanner();
+            speakJapanese(tutor.sampleJp);
+            showToast(`🎉 ${tutor.name} 성우를 해금했습니다!`, 'success');
+        }
+
+        function buyStamp(stampId) {
+            const stamp = TRAVEL_STAMPS.find(s => s.id === stampId);
+            if (appState.coins < stamp.price) {
+                showToast(`엔화가 부족합니다! (필요: ¥${stamp.price})`, 'error');
+                return;
+            }
+            appState.coins -= stamp.price;
+            appState.unlockedStamps.push(stampId);
+            saveState();
+            renderShop();
+            showToast(`⛩️ [${stamp.name}] 스탬프를 획득했습니다!`, 'success');
+        }
+
+        function renderSettings() {
+            document.getElementById('vv-url-input').value = appState.voicevoxUrl;
+            const clearedCount = Object.keys(appState.clearedMissions).length;
+            document.getElementById('stat-cleared').textContent = clearedCount;
+            document.getElementById('stat-stars').textContent = appState.stars;
+            document.getElementById('stat-stamps').textContent = appState.unlockedStamps.length;
+
+            const ranks = ['Lv.1 히라가나 여행자', 'Lv.2 편의점 마스터', 'Lv.3 도쿄 로컬 회화러', 'Lv.4 비즈니스 일본어 고수', 'Lv.5 네이티브 정복자'];
+            const rankIdx = Math.min(Math.floor(clearedCount / 2), ranks.length - 1);
+            document.getElementById('profile-rank-title').textContent = ranks[rankIdx];
+
+            const barsContainer = document.getElementById('jlpt-progress-bars');
+            barsContainer.innerHTML = '';
+            Object.keys(JLPT_LEVELS).forEach(lvl => {
+                const levelMissions = MISSIONS_DB[lvl];
+                const clearedInLvl = levelMissions.filter(m => appState.clearedMissions[m.id] > 0).length;
+                const pct = Math.round((clearedInLvl / levelMissions.length) * 100);
+
+                barsContainer.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[11px] font-bold mb-1">
+                            <span class="text-slate-700">${lvl} (${JLPT_LEVELS[lvl].name})</span>
+                            <span class="text-indigoJp-600">${clearedInLvl} / ${levelMissions.length} 완료 (${pct}%)</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="${JLPT_LEVELS[lvl].color} h-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            checkVoicevoxConnection(false);
+        }
+
+        function saveVoicevoxSettings() {
+            const url = document.getElementById('vv-url-input').value.trim().replace(/\/$/, '');
+            if (url) {
+                appState.voicevoxUrl = url;
+                saveState();
+            }
+            checkVoicevoxConnection(true);
+        }
+
+        function testCurrentVoice() {
+            const tutor = AI_TUTORS.find(t => t.id === appState.activeTutorId) || AI_TUTORS[0];
+            speakJapanese(tutor.sampleJp);
+        }
+
+        async function exportProgressData() {
+            const jsonStr = JSON.stringify(appState);
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(jsonStr);
+                } else {
+                    const tempInput = document.createElement('textarea');
+                    tempInput.value = jsonStr;
+                    tempInput.style.position = 'fixed';
+                    tempInput.style.opacity = '0';
+                    document.body.appendChild(tempInput);
+                    tempInput.focus();
+                    tempInput.select();
+                    const copied = document.execCommand('copy');
+                    tempInput.remove();
+                    if (!copied) throw new Error('copy failed');
+                }
+                showToast('학습 백업 JSON을 클립보드에 복사했습니다.', 'success');
+            } catch (error) {
+                const blob = new Blob([jsonStr], {type:'application/json;charset=utf-8'});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'nihongo-quest-backup.json';
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                showToast('클립보드 대신 백업 파일을 저장했습니다.', 'info');
+            }
+        }
+
+        function importProgressData() {
+            const backup = window.prompt('복원할 학습 백업 JSON 코드를 붙여넣으세요.\n기존 학습 기록은 교체됩니다.');
+            if (backup === null) return;
+            try {
+                const parsed = JSON.parse(backup);
+                if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) ||
+                    !('clearedMissions' in parsed) || !('coins' in parsed)) throw new Error('학습 백업 파일이 아닙니다.');
+                const restored = validateProgress(parsed);
+                if (!window.confirm('현재 학습 기록을 백업 데이터로 교체하시겠습니까?')) return;
+                stopAllSpeech();
+                sessionToken++;
+                appState = restored;
+                saveState();
+                renderJlptSelector();
+                renderMissions();
+                renderSettings();
+                renderActiveTutorBanner();
+                showToast('학습 기록 복원이 완료되었습니다.', 'success');
+            } catch (error) {
+                showToast('유효하지 않은 백업 JSON입니다: ' + error.message, 'error');
+            }
+        }
+
+        function resetProgressData() {
+            if (!window.confirm('모든 학습 기록과 구매 내역을 초기화할까요?')) return;
+            stopAllSpeech();
+            sessionToken++;
+            localStorage.removeItem('nihongo_quest_mobile_v2');
+            appState = { ...DEFAULT_STATE };
+            saveState();
+            renderJlptSelector();
+            renderMissions();
+            renderSettings();
+            showToast('학습 데이터가 초기화되었습니다.', 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            const box = document.getElementById('toast-box');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white',
+                info: 'bg-slate-800/95 text-white'
+            };
+            toast.className = `${colors[type] || colors.info} px-4 py-2.5 rounded-2xl text-xs font-bold shadow-xl animate-pop-in text-center backdrop-blur-sm`;
+            toast.textContent = message;
+            box.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => toast.remove(), 250);
+            }, 2500);
+        }
+
+        /* =========================================================================
+           9. 초기화
+           ========================================================================= */
+        window.onload = function() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+            }
+            initSpeechRecognition();
+            updateHeaderStats();
+            renderJlptSelector();
+            renderMissions();
+            checkVoicevoxConnection(false);
+        };
+    </script>
+</body>
+</html>
