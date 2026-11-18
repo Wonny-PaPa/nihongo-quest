@@ -1,0 +1,17 @@
+
+{
+  "name": "일본어회화",
+  "short_name": "일본어회화",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#131130",
+  "theme_color": "#131130",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
